@@ -607,6 +607,8 @@ TEST(Async, ForkMaybeRef) {
   EXPECT_EQ(789, branch2.wait(waitScope));
 }
 
+// GCC gets compilation errors with promise continuations in lambdas
+#if !(__GNUC__ && !__clang__)
 KJ_TEST("addBranchForCoAwait") {
   EventLoop loop;
   WaitScope waitScope(loop);
@@ -622,6 +624,7 @@ KJ_TEST("addBranchForCoAwait") {
 
   KJ_EXPECT(coro().wait(waitScope) == 123);
 }
+#endif  // !(__GNUC__ && !__clang__)
 
 TEST(Async, Split) {
   EventLoop loop;
